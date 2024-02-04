@@ -1,30 +1,77 @@
-# React + TypeScript + Vite
+# KleverHub Integration Guide
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
 
-Currently, two official plugins are available:
+This documentation offers a straightforward guide on utilizing the methods exposed by KleverHub when seamlessly injected into your browser. Ideal for integration with various chains supported by the Klever Extension, this guide is your go-to resource. If you're not dealing with multiple chains, you can stick to using `kleverWeb` for a simplified experience. Let's dive in!
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting Started
 
-## Expanding the ESLint configuration
+### Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Ensure that the Klever Extension is installed in your browser.
 
-- Configure the top-level `parserOptions` property like this:
+### Initialization
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
+In your React application, initialize the `KleverHub` by calling the `initialize` method. This method takes an optional parameter, chain, representing the blockchain to connect to. If not provided, it defaults to the Klever Chain (KLV), but you can also use `"TRX"` for Tron or `"ETH"` for Ethereum.
+
+```javascript
+async function connectWallet() {
+  if (window && window.kleverHub) {
+    try {
+      await window.kleverHub.initialize("KLV");
+
+      if (window.kleverHub.connected) {
+        console.log("Connected to wallet");
+      }
+    } catch (error) {
+      console.error("Failed to connect to wallet:", error);
+    }
+  } else {
+    console.error("No wallet provider found");
+  }
 }
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Switching Blockchain
+You can switch between supported blockchains using the switchBlockchain method.
+
+```javascript
+await window.kleverHub.switchBlockchain("TRX");
+```
+
+### Handling Account Changes
+To react to changes in the connected account, use the `onAccountChanged` and `offAccountChanged` methods.
+
+```javascript
+useEffect(() => {
+  if (window && window.kleverHub) {
+    const handleAccountChanged = (account) => {
+      setAccount(account);
+    };
+
+    window.kleverHub.onAccountChanged(handleAccountChanged);
+
+    return () => {
+      window.kleverHub.offAccountChanged(handleAccountChanged);
+    };
+  }
+}, []);
+```
+
+### Handling Blockchain Changes
+Similarly, you can handle changes in the selected blockchain using `onBlockchainChanged` and `offBlockchainChanged`.
+
+```javascript
+useEffect(() => {
+  if (window && window.kleverHub) {
+    const handleBlockchainChanged = (chain) =>
+      setCurrentChain(chains[chain]);
+
+    window.kleverHub.onBlockchainChanged(handleBlockchainChanged);
+
+    return () => {
+      window.kleverHub.offBlockchainChanged(handleBlockchainChanged);
+    };
+  }
+}, []);
+```
