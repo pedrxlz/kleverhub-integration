@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import ethIcon from "./assets/eth.png";
+import klvIcon from "./assets/klv.png";
+import trxIcon from "./assets/trx.png";
 import { Select } from "./components/select";
 import { Chain, HubAccount } from "./types";
 import { formatAddress } from "./utils/format-address";
@@ -6,15 +9,15 @@ import { formatAddress } from "./utils/format-address";
 const chains = {
   [Chain.KLEVER]: {
     name: Chain.KLEVER,
-    icon: "src/assets/klv.png",
+    icon: klvIcon,
   },
   [Chain.ETHEREUM]: {
     name: Chain.ETHEREUM,
-    icon: "src/assets/eth.png",
+    icon: ethIcon,
   },
   [Chain.TRON]: {
     name: Chain.TRON,
-    icon: "src/assets/trx.png",
+    icon: trxIcon,
   },
 };
 
