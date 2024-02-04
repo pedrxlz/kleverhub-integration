@@ -6,15 +6,15 @@ import { formatAddress } from "./utils/format-address";
 const chains = {
   [Chain.KLEVER]: {
     name: Chain.KLEVER,
-    icon: "klv.png",
+    icon: "src/assets/klv.png",
   },
   [Chain.ETHEREUM]: {
     name: Chain.ETHEREUM,
-    icon: "eth.png",
+    icon: "src/assets/eth.png",
   },
   [Chain.TRON]: {
     name: Chain.TRON,
-    icon: "trx.png",
+    icon: "src/assets/trx.png",
   },
 };
 

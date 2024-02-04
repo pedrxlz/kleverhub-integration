@@ -18,7 +18,7 @@ const Option: React.FC<OptionProps> = ({
   <div className={twMerge("flex items-center", className)} {...props}>
     {option.icon && (
       <img
-        src={`/${option.icon}`}
+        src={option.icon}
         alt={`${option.name} icon`}
         className="mr-2 w-5 h-5 rounded-full"
       />
