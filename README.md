@@ -12,13 +12,13 @@ Ensure that the Klever Extension is installed in your browser.
 
 ### Initialization
 
-In your React application, initialize the `KleverHub` by calling the `initialize` method. This method takes an optional parameter, `chain`, representing the blockchain to connect to. If not provided, it defaults to the Klever Chain (`KLV`).
+In your React application, initialize the `KleverHub` by calling the `initialize` method. This method takes an optional parameter, chain, representing the blockchain to connect to. If not provided, it defaults to the Klever Chain (KLV), but you can also use `"TRX"` for Tron or `"ETH"` for Ethereum.
 
 ```javascript
 async function connectWallet() {
   if (window && window.kleverHub) {
     try {
-      await window.kleverHub.initialize(Chain.KLEVER);
+      await window.kleverHub.initialize("KLV");
 
       if (window.kleverHub.connected) {
         console.log("Connected to wallet");
@@ -36,9 +36,7 @@ async function connectWallet() {
 You can switch between supported blockchains using the switchBlockchain method.
 
 ```javascript
-async function switchBlockchain(chain: keyof typeof Chain) {
-  await window.kleverHub.switchBlockchain(chain);
-}
+await window.kleverHub.switchBlockchain("TRX");
 ```
 
 ### Handling Account Changes
@@ -47,7 +45,7 @@ To react to changes in the connected account, use the `onAccountChanged` and `of
 ```javascript
 useEffect(() => {
   if (window && window.kleverHub) {
-    const handleAccountChanged = (account: HubAccount) => {
+    const handleAccountChanged = (account) => {
       setAccount(account);
     };
 
@@ -61,12 +59,12 @@ useEffect(() => {
 ```
 
 ### Handling Blockchain Changes
-Similarly, you can handle changes in the selected blockchain using onBlockchainChanged and offBlockchainChanged.
+Similarly, you can handle changes in the selected blockchain using `onBlockchainChanged` and `offBlockchainChanged`.
 
 ```javascript
 useEffect(() => {
   if (window && window.kleverHub) {
-    const handleBlockchainChanged = (chain: Chain) =>
+    const handleBlockchainChanged = (chain) =>
       setCurrentChain(chains[chain]);
 
     window.kleverHub.onBlockchainChanged(handleBlockchainChanged);
