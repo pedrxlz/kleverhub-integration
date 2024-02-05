@@ -16,20 +16,19 @@ In your React application, initialize the `KleverHub` by calling the `initialize
 
 ```javascript
 async function connectWallet() {
-  if (window && window.kleverHub) {
-    try {
-      await window.kleverHub.initialize("KLV");
+    if (window && window.kleverHub) {
+      try {
+        await window.kleverHub.initialize(Chain.KLEVER);
 
-      if (window.kleverHub.connected) {
-        console.log("Connected to wallet");
+        setAccount(window.kleverHub.account);
+      } catch (error) {
+        console.error("Failed to connect to wallet:", error);
       }
-    } catch (error) {
-      console.error("Failed to connect to wallet:", error);
+    } else {
+      console.error("No wallet provider found");
     }
-  } else {
-    console.error("No wallet provider found");
   }
-}
+
 ```
 
 ### Switching Blockchain
@@ -43,35 +42,30 @@ await window.kleverHub.switchBlockchain("TRX");
 To react to changes in the connected account, use the `onAccountChanged` and `offAccountChanged` methods.
 
 ```javascript
-useEffect(() => {
-  if (window && window.kleverHub) {
-    const handleAccountChanged = (account) => {
-      setAccount(account);
-    };
+  useEffect(() => {
+    // If is not connected return
+    if (!account) return;
 
     window.kleverHub.onAccountChanged(handleAccountChanged);
 
     return () => {
       window.kleverHub.offAccountChanged(handleAccountChanged);
     };
-  }
-}, []);
+  }, [account]);
 ```
 
 ### Handling Blockchain Changes
 Similarly, you can handle changes in the selected blockchain using `onBlockchainChanged` and `offBlockchainChanged`.
 
 ```javascript
-useEffect(() => {
-  if (window && window.kleverHub) {
-    const handleBlockchainChanged = (chain) =>
-      setCurrentChain(chains[chain]);
+  useEffect(() => {
+    // If is not connected return
+    if (!account) return;
 
     window.kleverHub.onBlockchainChanged(handleBlockchainChanged);
 
     return () => {
       window.kleverHub.offBlockchainChanged(handleBlockchainChanged);
     };
-  }
-}, []);
+  }, [account]);
 ```
