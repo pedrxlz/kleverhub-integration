@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ethIcon from "./assets/eth.png";
 import klvIcon from "./assets/klv.png";
 import trxIcon from "./assets/trx.png";
+import Balance from "./components/balance";
 import { Select } from "./components/select";
 import { Chain, HubAccount } from "./types";
 import { formatAddress } from "./utils/format-address";
@@ -66,20 +67,21 @@ function App() {
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
       <div className="w-96 p-6 border border-gray-300 rounded-md bg-white shadow-lg">
         {!!account && (
-          <Select
-            options={Object.values(chains)}
-            selectedOption={currentChain}
-            onSelect={switchBlockchain}
-          />
-        )}
+          <>
+            <Select
+              options={Object.values(chains)}
+              selectedOption={currentChain}
+              onSelect={switchBlockchain}
+            />
 
-        {!!account && (
-          <div className="mt-4">
-            <h1 className="text-lg font-semibold mb-2">
-              Connected Address: {formatAddress(account?.address)}
-            </h1>
-            <p className="text-sm text-gray-500">{account?.name}</p>
-          </div>
+            <div className="mt-4">
+              <h1 className="text-lg font-semibold mb-2">
+                Connected Address: {formatAddress(account?.address)}
+              </h1>
+              <Balance account={account} />
+              <p className="text-sm text-gray-500">{account?.name}</p>
+            </div>
+          </>
         )}
 
         {!account && (
