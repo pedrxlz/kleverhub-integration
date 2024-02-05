@@ -43,6 +43,7 @@ To react to changes in the connected account, use the `onAccountChanged` and `of
 
 ```javascript
   useEffect(() => {
+    // If is not connected return
     if (!account) return;
 
     window.kleverHub.onAccountChanged(handleAccountChanged);
@@ -58,6 +59,7 @@ Similarly, you can handle changes in the selected blockchain using `onBlockchain
 
 ```javascript
   useEffect(() => {
+    // If is not connected return
     if (!account) return;
 
     window.kleverHub.onBlockchainChanged(handleBlockchainChanged);
