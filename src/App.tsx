@@ -30,9 +30,7 @@ function App() {
       try {
         await window.kleverHub.initialize(Chain.KLEVER);
 
-        if (window.kleverHub.connected) {
-          console.log("Connected to wallet");
-        }
+        setAccount(window.kleverHub.account);
       } catch (error) {
         console.error("Failed to connect to wallet:", error);
       }
@@ -45,41 +43,35 @@ function App() {
     await window.kleverHub.switchBlockchain(event);
   }
 
-  useEffect(() => {
-    if (window && window.kleverHub) {
-      const handleAccountChanged = (account: HubAccount) => {
-        setAccount(account);
-      };
+  const handleAccountChanged = (account: HubAccount) => {
+    setAccount(account);
+  };
 
-      window.kleverHub.onAccountChanged(handleAccountChanged);
-
-      return () => {
-        window.kleverHub.offAccountChanged(handleAccountChanged);
-      };
-    }
-  }, []);
+  const handleBlockchainChanged = (chain: Chain) =>
+    setCurrentChain(chains[chain]);
 
   useEffect(() => {
-    if (window && window.kleverHub) {
-      const handleBlockchainChanged = (chain: Chain) =>
-        setCurrentChain(chains[chain]);
+    if (!account) return;
 
-      window.kleverHub.onBlockchainChanged(handleBlockchainChanged);
+    window.kleverHub.onAccountChanged(handleAccountChanged);
+    window.kleverHub.onBlockchainChanged(handleBlockchainChanged);
 
-      return () => {
-        window.kleverHub.offBlockchainChanged(handleBlockchainChanged);
-      };
-    }
-  }, []);
+    return () => {
+      window.kleverHub.offAccountChanged(handleAccountChanged);
+      window.kleverHub.offBlockchainChanged(handleBlockchainChanged);
+    };
+  }, [account]);
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
       <div className="w-96 p-6 border border-gray-300 rounded-md bg-white shadow-lg">
-        <Select
-          options={Object.values(chains)}
-          selectedOption={currentChain}
-          onSelect={switchBlockchain}
-        />
+        {!!account && (
+          <Select
+            options={Object.values(chains)}
+            selectedOption={currentChain}
+            onSelect={switchBlockchain}
+          />
+        )}
 
         {!!account && (
           <div className="mt-4">
